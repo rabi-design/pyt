@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
+# noinspection PyBroadException
 class Soup:
     def __init__(
             self,
@@ -35,7 +36,7 @@ class Soup:
         return ses
 
     def bs(self, url):
-        # noinspection PyBroadException
+
         try:
             if self.f == "t":
                 req = requests.get(url)
@@ -55,4 +56,4 @@ class Soup:
 
 if __name__ == "__main__":
     ss = Soup()
-    print(ss.main())  # test2
+    print(ss.main())  # test3
