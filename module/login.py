@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 
 
-# noinspection PyBroadException
 class Soup:
     def __init__(
             self,
@@ -30,30 +29,13 @@ class Soup:
             self.ses_id: self.id_l,
             self.ses_pass: self.password
         }
-        get_token = soup1.find(attrs={"name": self.ses_token}).get("value")
-        login_data[self.ses_token] = get_token
+        print(soup1)
+        #get_token = soup1.find(attrs={"name": self.ses_token}).get("value")
+        #login_data[self.ses_token] = get_token
         ses.post(self.login_url, data=login_data)
         return ses
-
-    def bs(self, url):
-
-        try:
-            if self.f == "t":
-                req = requests.get(url)
-            elif self.f == "f":
-                req = self.login().get(url)
-
-            soup1 = BeautifulSoup(req.text, "html.parser")
-            return soup1
-
-        except:
-            print("error")
-
-    def main(self):
-        url = "https://www.jetbrains.com/pycharm/download/download-thanks.html"
-        return self.bs(url)
 
 
 if __name__ == "__main__":
     ss = Soup()
-    print(ss.main())  # test3
+    print(ss.login())  # test3

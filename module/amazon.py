@@ -26,7 +26,7 @@ def amazon(asin_code):
         except:
             pass
             # ここにドライバーの再起動の記述を書く
-    sleep(10)
+    sleep(6)
     html = driver.page_source.encode('utf-8')
     bs = BeautifulSoup(html, "html.parser")
     return driver, bs
