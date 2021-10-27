@@ -2,7 +2,7 @@ import tkinter as tk
 import random, pygame
 from PIL import Image, ImageTk
 from math import sin, cos, pi
-from time import sleep, time
+from time import time
 from glob import glob
 WINDOW_HEIGHT = 600  # ウィンドウの高さ
 WINDOW_WIDTH = 600  # ウィンドウの幅
@@ -20,9 +20,9 @@ BULLET_SPEED = 10  # 弾のスピード(10 ms)
 
 
 class enemy:
-    def __init__(self):
-        self.x = WINDOW_WIDTH / 2
-        self.y = 200
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.draw()
 
     # noinspection PyAttributeOutsideInit
@@ -43,22 +43,24 @@ class EnemyBullet:  # 敵の弾
 
     # noinspection PyUnresolvedReferences,PyUnboundLocalVariable
     def shoot(self):
-        global count
         if self.y <= WINDOW_HEIGHT:
             print(time() - nt)
+            global v
             if time() - nt > 1:
                 try:
-                    if count > 7:
-                        print(count)
-                    else:
-                        self.radian = self.radian + pi / 2
-                        count += 1
-
+                    self.radian = pi * v / 4 + pi / 2
+                    v += 1
                 except:
-                    self.radian = self.radian + pi / 2
-                    print("aaa")
-                    count = 1
+                    self.radian = pi * s / 4 + pi / 2
 
+            if s == 8:
+                try:
+                    print(v)
+                    if v % 8 == 1:
+                        v = v % 8
+                    pass
+                except:
+                    v = 1
             nx = BULLET_HEIGHT * cos(self.radian)
             ny = BULLET_HEIGHT * sin(self.radian)
             cv.move(self.id, nx, ny)
@@ -74,15 +76,14 @@ class EnemyBullet:  # 敵の弾
 
 # noinspection PyAttributeOutsideInit
 
-
 if __name__ == '__main__':
-    count = 0
+    flg = True
     pygame.mixer.init(frequency=44100)  # 初期設定
-    ms = glob("music/*.mp3")
-    for m in ms:
-        pygame.mixer.music.load(m)  # 音楽ファイルの読み込み
-    pygame.mixer.music.set_volume(0.1)
-    pygame.mixer.music.play(1)
+    # ms = glob("music/*.mp3")
+    # for m in ms:
+    #     pygame.mixer.music.load(m)  # 音楽ファイルの読み込み
+    # pygame.mixer.music.set_volume(0.1)
+    # pygame.mixer.music.play(1)
     nt = time()
     root = tk.Tk()
     root.title("invader")
@@ -92,21 +93,23 @@ if __name__ == '__main__':
     root.configure(menu=menubar)
     menubar.add_command(label="QUIT", underline=0, command=root.quit)
 
-    shot_img = Image.open("gai.jpg")
+    shot_img = Image.open("images/gai.jpg")
     shot_tkimg = ImageTk.PhotoImage(shot_img)
-    ene_img = Image.open("astro.jpg")
+    ene_img = Image.open("images/astro.jpg")
     ene_tkimg = ImageTk.PhotoImage(ene_img)
-
-    ene = enemy()
+    ene_w = WINDOW_WIDTH / 2
+    ene_h = 200
+    ene = enemy(ene_w, ene_h)
     ene.draw()
     hankei = 70
     for s in range(1, 9):
         rad = pi * s / 4
-        fx = WINDOW_WIDTH / 2 + cos(rad) * hankei
-        fy = 200 + sin(rad) * hankei
+        fx = ene_w + cos(rad) * hankei
+        fy = ene_h + sin(rad) * hankei
         enemybullet = EnemyBullet(fx, fy, rad)
         enemybullet.draw()
         enemybullet.shoot()
+
 
     # インスタンス生成
     # cannon = Cannon(WINDOW_WIDTH // 2, CANNON_Y)
